@@ -1,4 +1,7 @@
 .layouts-suggested-topics-list {
+  max-height: 70vh;
+  overflow: auto;
+
   .suggested-topics-title {
     margin-bottom: 1rem;
   }
