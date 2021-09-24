@@ -1,6 +1,44 @@
 .layouts-suggested-topics-list {
+  .suggested-topics-title {
+    margin-bottom: 1rem;
+  }
+
   ul.suggested-topics {
     margin: 0;
+    list-style: none;
+  }
+
+  li.topic-list-item {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0.5rem 0;
+
+    &:not(:first-child) {
+      border-top: 1px solid var(--primary-low);
+    }
+
+    a.title {
+      flex: 0 0 100%;
+      color: var(--primary);
+      width: 250px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      &:hover {
+        color: var(--primary-medium);
+      }
+    }
+
+    a.badge-wrapper {
+      font-size: var(--font-down-2);
+    }
+
+    a.discourse-tags {
+      font-size: var(--font-down-2);
+    }
   }
 }
 

@@ -12,6 +12,11 @@ try {
   console.warn(error);
 }
 
+function htmlDecode(input) {
+  let doc = new DOMParser().parseFromString(input, 'text/html');
+  return doc.documentElement.textContent;
+}
+
 export default layouts.createLayoutsWidget('suggested-topics-list', {
   html(attrs) {
     const { topic } = attrs;
@@ -29,19 +34,22 @@ export default layouts.createLayoutsWidget('suggested-topics-list', {
       );
     });
 
-    return h('ul.suggested-topics', list);
+    return [
+      h('h3.suggested-topics-title', 'Suggested Topics'),
+      h('ul.suggested-topics', list),
+    ];
   },
 });
 
 createWidget('layouts-suggested-topic', {
-  tagName: 'li',
+  tagName: 'li.topic-list-item',
   buildKey: (attrs) => `layouts-suggested-topic-${attrs.topic.id}`,
 
   html(attrs, state) {
     const { topic } = attrs;
     const contents = [];
 
-    const topicTitle = topic.fancyTitle;
+    const topicTitle = htmlDecode(topic.fancyTitle);
     const topicUrl = topic.url;
     const categoryColor = topic.category.color;
     const categoryName = topic.category.name;
@@ -51,6 +59,7 @@ createWidget('layouts-suggested-topic', {
     const viewCount = topic.views;
     const activity = topic.last_posted_at;
     const tags = topic.tags;
+    const tagStyle = topic.siteSettings.tag_style;
 
     contents.push(
       h(
@@ -69,7 +78,7 @@ createWidget('layouts-suggested-topic', {
         'span.badge-category-bg',
         {
           attributes: {
-            style: `background-color: ${categoryColor}`,
+            style: `background-color: #${categoryColor}`,
           },
         },
         ''
@@ -89,7 +98,28 @@ createWidget('layouts-suggested-topic', {
       )
     );
 
-    console.log('topic', topic);
+    contents.push(this.getTags(tags, tagStyle));
     return contents;
+  },
+
+  getTags(tags, tagStyle) {
+    const allTags = [];
+    if (tags) {
+      tags.forEach((tag) => {
+        console.log(tag);
+        allTags.push(
+          h(
+            `a.discourse-tag.${tagStyle}`,
+            {
+              attributes: {
+                href: `/tag/${tag}`,
+              },
+            },
+            tag
+          )
+        );
+      });
+    }
+    return h('div.discourse-tags', allTags);
   },
 });

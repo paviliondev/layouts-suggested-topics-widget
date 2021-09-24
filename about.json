@@ -4,5 +4,8 @@
   "assets": {
   },
   "name": "Layouts Suggested Topics Widget",
-  "component": true
+  "component": true,
+  "modifiers": {
+    "svg_icons": []
+  }
 }
